@@ -4,6 +4,22 @@ import java.io.File
 import java.time.Duration
 import java.time.Instant
 
+/**
+ * Takes two parameters as input, a source list and a sublist, and calculates and returns the number of
+ * sublist items which are available in the source list, using simple linear search.
+ */
+fun calculateNames(sourceList: List<String>, subList: List<String>): Int {
+    var itemsFound = 0
+    subList.forEach { name ->
+        for (row in sourceList) {
+            if (row == name) {
+                itemsFound++
+                break
+            }
+        }
+    }
+    return itemsFound
+}
 
 fun printResult(startingTime: Instant, endingTime: Instant, itemsFound: Int, totalItems: Int) {
     val mins = Duration.between(startingTime, endingTime).toMinutes()
@@ -14,19 +30,21 @@ fun printResult(startingTime: Instant, endingTime: Instant, itemsFound: Int, tot
 }
 
 
+
+
 fun main() {
     val directoryFile = File(SOURCE_FILE_PATH)
     val targetFile = File(SUB_FILE_PATH)
 
     val sourceList = directoryFile.readLines().map { it.split(" ").drop(1).joinToString(" ") }
-    val targetList = targetFile.readLines()
+    val subList = targetFile.readLines()
 
     val startingTime = Instant.now()
     println("Start searching...")
 
-    val itemsFound = targetList.count { it in sourceList }
+    val itemsFound = calculateNames(sourceList, subList)
     val endingTime = Instant.now()
 
-    printResult(startingTime, endingTime, itemsFound, targetList.size)
+    printResult(startingTime, endingTime, itemsFound, subList.size)
 }
 
